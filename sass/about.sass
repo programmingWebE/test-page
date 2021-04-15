@@ -1,0 +1,144 @@
+@import 'responsive'
+
+.about
+	background-repeat: no-repeat
+	background-size: cover
+	background-position: top center
+	+media(lgxs)
+		display: flex
+		padding-top: 25px
+		min-height: 100vh
+	+media(md)
+		background-position: center
+
+	&__row
+		position: relative
+		padding-bottom: 40px
+		+media(lgxs)
+			display: flex
+			height: 100%
+
+	&__wrap
+		display: flex
+		flex-wrap: wrap
+		height: 60vh
+		+media(lgxs)
+			height: 100%
+			width: 100%
+
+		&--white
+			.about__list
+				background-color: #fbfbfb
+
+			.about__link
+				color: #292929
+
+			.line-burger
+				background-color: #292929
+				&:after,
+				&:before
+					background-color: #292929
+
+	&__item
+		&--content
+			width: 414px
+			+media(lgxs)
+				width: 40%
+			+media(lgxs)
+				width: 100%
+
+		&--block
+			width: calc(100% - 414px)
+			align-self: flex-end
+			padding-left: 33px
+			+media(lgxs)
+				width: 60%
+				padding-top: 150px
+			+media(lgxs)
+				width: 100%
+				padding-left: 0px
+				padding-top: 0
+				padding-bottom: 30px
+				margin-top: auto
+
+	&__title
+		font-size: 24px
+		line-height: 1.2
+		color: #fbfbfb
+		font-weight: 300
+		+media(lgxs)
+			font-size: 20px
+		+media(md)
+			color: #292929
+			font-weight: 400
+
+	&__text
+		max-width: 528px
+		+media(lgxs)
+			max-width: 100%
+
+		p
+			font-size: 16px
+			line-height: 19px
+			color: #fbfbfb
+			font-weight: 300
+			+media(md)
+				color: #292929
+				font-weight: 400
+			+media(xs)
+				font-size: 14px
+				line-height: 16.5px
+			&:not(:last-child)
+				padding-bottom: 1.2em
+
+	&__inner
+		display: flex
+		align-items: center
+		justify-content: space-between
+		margin-bottom: 25px
+		+media(lgxs)
+			position: relative
+			margin-bottom: 65px
+		&--single
+			display: none
+			+media(lgxs)
+				display: flex
+
+	&__logo
+		display: block
+		position: relative
+		z-index: 9
+		max-width: 415px
+		+media(lgxs)
+			max-width: 140px
+		img
+			display: block
+
+	&__menu
+		display: none
+		+media(lgxs)
+			display: block
+
+	&__list
+		display: none
+		width: calc(100% + 60px)
+		top: calc(100% + 10px)
+		left: -30px
+		z-index: 8
+		position: absolute
+		padding: 0px
+		padding-top: 10px
+		background-color: #101010
+		max-height: calc(100vh - 70px)
+		overflow-y: auto
+		overflow-x: hidden
+		li:not(:last-child)
+			.about__link
+				border-bottom: 1px solid #ccc
+				
+	&__link
+		display: block
+		font-size: 16px
+		color: #fbfbfb
+		padding: 12px 0
+		padding-left: 30px
