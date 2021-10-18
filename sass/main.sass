@@ -1,300 +1,155 @@
 @import 'responsive'
 
+html
+	font-size: 16px
+
 body
 	margin: 0
 	padding: 0
-	cursor: none !important
+	width: 100%
+	min-height: 100vh
 	overflow-x: hidden
 	color: #333333
 	background-color: #fff
-	font-size: 16px
 	line-height: 1.2
 	font-weight: normal
 	font-style: normal
-	font-family: "Roboto Condensed"
-	box-sizing: border-box
-	+media(lgxs)
-		cursor: default !important
+	font-family: ImagoPro
 
-*
+* 
 	box-sizing: border-box
 
 *::after,
 *::before
 	box-sizing: border-box
 
+.visually-hidden
+	position: absolute
+	width: 1px
+	height: 1px
+	margin: -1px
+	bottom: 0
+	padding: 0
+	white-space: nowrap
+	clip-path: inset(100%)
+	clip: rect(0 0 0 0)
+	overflow: hidden
+
+
 img
 	max-width: 100%
 	height: auto
 
-.svg
-	&-about
-		display: none
+.svg-about
+	display: none
 
 .container
-	max-width: 1200px
+	max-width: 1400px
 	width: 100%
 	margin: 0 auto
-	&--inner
-		max-width: 1440px
-		padding: 0px
+	&--info
+		max-width: 1190px
+		padding: 0 100px
+		+media(sm)
+			padding: 0 48px
 
-.item
-	position: relative
-	width: 100%
-	//height: 100%
-	padding: 50px 175px
-	padding-bottom: 30px
-	overflow-y: auto
-	overflow-x: visible
-	+media(lgxs)
-		overflow: visible
-		padding: 0 30px
+	&--panel
+		max-width: 1296px
+		padding: 0 48px
+		+media(md)
+			padding: 0 24px
+		
 
-	&--main
-		display: flex
-		align-items: center
-
-#slider .swiper-wrapper
-	+media(lgxs)
-		flex-direction: column
-
-.title--mob
-	display: none
-	font-size: 20px
-	line-height: 1.2
-	color: #616161
-	text-transform: uppercase
-	padding-bottom: 22px
-	font-weight: normal
-	+media(lgxs)	
-		display: block
-
-.aside
-	position: fixed
-	left: 0px
-	z-index: 55
-	max-width: 100px
-	width: 100%
-	height: 100%
-	display: flex
-	justify-content: flex-end
-	align-items: center
-	border-right: 1px solid #afafaf
-	+media(lgxs)
-		display: none
-
-	&__list
-		display: flex	
-		flex-direction: column-reverse
-		align-items: flex-end
-
-	&__link
-		user-select: none
-		writing-mode: vertical-rl
-		transform: rotate(-180deg)
-		cursor: pointer
-		font-size: 16px
-		color: #fbfbfb
-		border-left: 3px solid transparent
-		padding-left: 13px
-		text-transform: uppercase
-		transition: 0.3s color, 0.3s border
-		&--active
-			border-left: 3px solid #fff
-		&:not(:first-child)
-			margin-bottom: 64px
-			+media(lgs)
-				margin-bottom: 40px
-
-.wrap
-	position: absolute
-	top: 0px
-	bottom: 0px
-	right: 0px
-	left: 0px
-	overflow: hidden
-	transition: 0.5s left
-	+media(lgxs)
-		position: static
-		overflow: visible
-
-	&--page
-
-.holder
-	&.light__mode
-		.aside
-			align-items: flex-start
-			padding-top: 90px
-		.aside__link
-			color: #fbfbfb
-		.aside__link--active
-			border-left-color: #fbfbfb
-
-
-	&.dark__mode
-		.aside__link
-			color: #292929
-		.aside__link--active
-			border-left-color: #292929
-
-.dark-bg
-	background-color: #101010
+	&--block
+		max-width: 988px
+		padding: 0 24px
 
 .input
 	display: block
 	width: 100%
+	background-color: #c4c4c4
 	border: none
-	border-bottom: 1px solid #292929
-	border-radius: 0px
-	padding: 5px 0
-	&--popup
-		background-color: transparent
-		color: #afafaf
-		border-color: #fbfbfb
-
+	outline: none
+	padding: 10px
+	padding-bottom: 11px
 	&.form-fail
 		border-color: #b00
 
 	&.form-done
 		border-color: #90ee90
 
-.сhange--mode
-	.item
-		background-color: #101010
-
-	.services__link, .aside__link,
-	.services__box--content ul li
-		color: #fbfbfb
-		&:after
-			color: inherit
-
-	.btn--details, .btn--send
-		color: #afafaf
-		border-color: #afafaf
-		background-color: transparent
-
-	.contacts__title
-		color: #616161
-
-	.contacts__email, .contacts__label
-		color: #fbfbfb
-
-	.contacts__link
-		color: #fbfbfb
-
-	.input
-		background-color: transparent
-		border-color: #fbfbfb
-		color: #fbfbfb
-
-	#text
-		color: #fff
-
-.title
-	font-size: 36px
-	color: #41307e
-	text-transform: uppercase
-
 .btn
-	display: block
-	width: 100%
+	overflow: hidden
+	background-repeat: no-repeat
+	background-size: 12px 20px
+	background-position: right 10px center
+	display: inline-block
 	cursor: pointer
-	font: inherit
-	font-size: 16px
-	line-height: 1.2
-	color: #292929
-	border: none
-	outline: none
-	text-align: center
+	max-width: max-content
+	width: 100%
+	position: relative
+	font-size: 1.125rem
+	line-height: 1.8	
+	color: #fff
+	background-color: transparent
+	border: 1px solid #fff
+	border-radius: 8px
 	text-transform: uppercase
-	border: 1px solid #292929
-	background-color: #fff
-	padding: 11px 5px
-	padding-bottom: 12px
-	border-radius: 2px
+	text-align: left
+	padding: 7px 12px
+	padding-right: 42px
+	font-family: ImagoPro
 	font-weight: normal
-	transition: 0.3s background-color, 0.3s color, 0.3s border
-	&--details
-		max-width: 160px
+	transition: 0.3s background-color
+	+media(sm)
+		padding: 11px 12px
+
+	span
 		position: relative
-		margin-left: auto
+		transition-timing-function: cubic-bezier(0.2, 1, 0.3, 1)
+		transition: 0.3s transform, 0.3s opacity
+		&:after
+			position: absolute
+			content: ' '
+			right: -20px
+			top: calc(50% - 6px)
+			width: 12px
+			height: 12px
+			border-top: 3px solid #fff
+			border-right: 3px solid #fff
+			transform: rotate(45deg)
 
-	&--send
-		max-width: 172px
-		margin-bottom: 65px
-		+media(lgxs)
-			margin-bottom: 70px
+		&.no-active
+			position: absolute
+			opacity: 0
+			left: 12px
+			transform: translate3d(0, 120%, 0)
+
+	&:hover
+		background-color: rgba(255, 255, 255, 0.1)
+		span:not(.no-active)
+			opacity: 0
+
+		.no-active
+			transform: translate3d(0, 0, 0)
+			opacity: 1
+
+	&--pic
+		min-width: 218px
+
+	&--info
+		min-width: 200px
+
+	&--info,
+	&--pic
 		+media(sm)
-			margin-bottom: 50px
-
-	&--send[disabled]
-		cursor: default
-		opacity: 0.5
-		text-decoration: line-through
-
-	&--popup
-		max-width: 120px
-		color: #afafaf
-		background-color: transparent
-		border-color: #afafaf
-		margin-top: auto
-		margin-left: auto
-		margin-bottom: 50px
-		+media(xxs)
-			max-width: 100%	
-
-	&--decor
-		position: absolute
-		bottom: -50px
-		right: -64px
-		width: 40px
-		height: 40px
-		border: none
-		background-color: transparent
-		background-image: url(img/icons/arrow-right.svg)
-		background-position: center
-		background-repeat: no-repeat
-		background-size: 30px
-		+media(lgxs)
-			display: none
-		// &:after
-		// 	content: ''
-		// 	position: absolute
-		// 	top: calc(50% - 1.5px)
-		// 	right: 0
-		// 	width: 40px
-		// 	height: 3px
-		// 	background-color: #fbfbfb
-		// 	transition: 0.3s background-color
-
-		// &:before
-		// 	content: ''
-		// 	position: absolute
-		// 	top: calc(50% - 14px)
-		// 	right: 2px
-		// 	width: 28px
-		// 	height: 28px
-		// 	border-top: 3px solid #fbfbfb
-		// 	border-right: 3px solid #fbfbfb
-		// 	transform: rotate(45deg)
-		// 	transition: 0.3s border-color
-
-	&--order
-		//position: absolute
-		//z-index: 1
-		//bottom: 0px
-		//right: 0px
-		background-color: #101010
-		max-width: 140px
-		display: block
-		color: #afafaf
-		border-color: #afafaf
-		//margin-top: auto
-		//margin-left: auto
-		+media(lgm)
-			order: 4
+			font-size: 0.8125rem
 			margin: 0 auto
-			margin-top: 50px
-		+media(xxs)
-			max-width: 100%	
+
+	&--user
+		font-size: 1.125rem
+		padding: 6px 12px
+		padding-bottom: 7px
+		margin-bottom: 22px
+		span:after
+			display: none

@@ -1,551 +1,221 @@
-$(document).ready(function () {
-
-   var mh = 0;
-   $(".services__box").each(function () {
-       var h_block = parseInt($(this).height());
-       if(h_block > mh) {
-          mh = h_block;
-       };
-   });
-   $(".services__box").height(mh);
-
-$('.mobile-wrap').on('click', function () {
-    $('.line-burger').toggleClass('line-active');
-    $('.about__list').slideToggle();
-});
-
-if ($(window).width() >= 960) {
-    $('.about__logo img').attr('src', $('.about__logo').data('white'));
-    $('.main__page .about__wrap').removeClass('about__wrap--white');
-} else {
-    $('.about__logo img').attr('src', $('.about__logo').data('black'));
-    $('.main__page .about__wrap').addClass('about__wrap--white');
+function getCookie(name) {
+  let matches = document.cookie.match(new RegExp(
+    "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
+  ));
+  return matches ? decodeURIComponent(matches[1]) : undefined;
 }
 
-$(window).resize(function () {
-    if ($(window).width() >= 840) {
-        $('.about__list').attr('style', '');
-        $('.line-burger').removeClass('line-active');
-    }
+$(document).ready(function() {
 
-    if ($(window).width() >= 960) {
-        $('.about__logo img').attr('src', $('.about__logo').data('white'));
-        $('.main__page .about__wrap').removeClass('about__wrap--white');
-    } else {
-        $('.about__logo img').attr('src', $('.about__logo').data('black'));
-        $('.main__page .about__wrap').addClass('about__wrap--white');
-    }
+  if (window.Swiper) {
+    let swiper = new Swiper(".swiper__info", {
+      loop: true,
+      navigation: {
+        nextEl: ".swiper-button-next.info__button.info__button--next",
+        prevEl: ".swiper-button-prev.info__button.info__button--prev",
+      },
+      pagination: {
+        clickable: true,
+        el: ".swiper-pagination",
+      },
+      allowTouchMove: false
+    });
+  }
 
-});
+  $('.main-header__search').on('click', function(){
+    $('.main-header__row').toggleClass('main-header__row--active');
+  })
 
-$('body').on('mouseover touchstart', 'video', function() {
-    $(this).attr('controls', 'controls');
-});
+  $('.main-header__user').on('click', function(){
+    $('.main-header__wrapper').toggleClass('main-header__wrapper--active');
+  })
 
-$('body').on('mouseout touchend', 'video', function() {
-    $(this).removeAttr('controls');
-});
+  $('.main-header__burger').on('click', function(){
+     $('.container--inner').toggleClass('active');
+     $('.menu').toggleClass('menu--active');
+  })
 
-function customCursor() {
-
-    const text = document.querySelector('#text');
-    const title = document.querySelector('#text .text--title');
-    const tag = document.querySelector('#text .text--tags');
-    const cursorInner = document.querySelector('.circle-cursor__inner');
-    const cursorOuter = document.querySelector('.circle-cursor__outer');
-
+  let image = $('.panel__image img');
+  let title = $('.panel__title');
+  let defaultTitle = $('.panel__title').data('default');
+  let defaultDesc = $('.panel__text p').data('default');
+  let wrap = $('.panel');
+  let desc = $('.panel__text p');
+  image.on('mouseover', function() {
     
-    let mx = window.innerWidth / 2;
-    let my = window.innerHeight / 2;
-    let cxi = mx,
-        cyi = my,
-        cxo = mx,
-        cyo = my;
+    let currentColor = $(this).data("color");
+    let currentTitle = $(this).data("title");
+    let currentDesc = $(this).data("text");
+    wrap.css("background", currentColor);
+    title.text(currentTitle);
+    desc.text(currentDesc);
 
-    window.addEventListener('mousemove', (event) => {
-        mx = event.clientX;
-        my = event.clientY;
+    image.addClass('panel__disabled');
+    $(this).addClass('panel__active');
+  })
+
+  image.on('mouseout', function() {
+    image.removeClass('panel__disabled');
+    image.removeClass('panel__active');
+    title.text(defaultTitle);
+    desc.text(defaultDesc);
+    wrap.attr('style', '')
+  })
+
+  $('.btn').each(function() {
+    $(this).children('span').clone().addClass('no-active').appendTo($(this));
+  });
+
+
+  let fontSize = getCookie('fontSize');
+  if (fontSize) {
+    $('html').css({
+      'fontSize': `${fontSize}px`
     });
-    window.addEventListener('touchmove', (event) => {
-        mx = event.touches[0].clientX;
-        my = event.touches[0].clientY;
+  }
+
+  let btnFont = $('.main-header__item');
+
+  btnFont.click(function() {
+    let elem = parseInt($(this).data('font'));
+    let fontSize = (16 * elem) / 100;
+    $('html').css({
+      'fontSize': `${fontSize}px`
     });
+    document.cookie = `fontSize=${fontSize}; path=/; max-age=2592000`;
+  });
 
-    function update() {
-        const dxi = (mx - cxi) * 0.3;
-        const dyi = (my - cyi) * 0.3;
-        cxi += dxi;
-        cyi += dyi;
+  function fixContrastBg() {
+    let $fixedMenu = $('.main-header');
+    let list = $('.main-header__menu');
+    let wrap = $('.main-header__wrap');
+    let $intersection = $('.main-header+section');
 
-        const dxo = (mx - cxo) * 0.25;
-        const dyo = (my - cyo) * 0.25;
-        cxo += dxo;
-        cyo += dyo;
-
-        cursorOuter.style.transform = `translate(${cxo}px, ${cyo}px)`;
-        cursorInner.style.transform = `translate(${cxi}px, ${cyi}px)`;
-        if(text !== null) {
-            text.style.transform = `translate(${cxo}px, ${cyo}px)`;
-        }
-
-        requestAnimationFrame(update);
+      if ($intersection.offset().top < $(window).scrollTop() ) {
+        $fixedMenu.addClass('header-control')
+       list.addClass("main-header__menu--hidden");
+        wrap.addClass('main-header__wrap--scroll')
+      } else {
+         $fixedMenu.removeClass('header-control')
+        list.removeClass("main-header__menu--hidden");
+         wrap.removeClass('main-header__wrap--scroll')
+      }
     }
 
-    requestAnimationFrame(update);
+    fixContrastBg();
 
-    ['mouseover', 'touchstart'].map(type => document.body.addEventListener(type, (event) => {
-        const image = event.target.closest('.photo__image');
-        if (!image) return;
-        title.textContent = image.dataset.title;
-        tag.textContent = image.dataset.tag;
-        text.style.opacity = 1;
-        cursorInner.classList.add('circle-cursor__hover');
-        cursorOuter.classList.add('circle-cursor__hover');
-    }));
-
-    ['mouseout', 'touchend'].map(type => document.body.addEventListener(type, (event) => {
-        const image = event.target.closest('.photo__image');
-        if (!image) return;
-        text.style.opacity = 0;
-        cursorInner.classList.remove('circle-cursor__hover');
-        cursorOuter.classList.remove('circle-cursor__hover');
-    }));
-
-    // fix ios
-    ['mouseover', 'touchstart'].map(type => document.body.addEventListener(type, (event) => {
-        const image = event.target.className;
-        if (image !== 'photo__wrap') return;
-        text.style.opacity = 0;
-        cursorInner.classList.remove('circle-cursor__hover');
-        cursorOuter.classList.remove('circle-cursor__hover');
-    }));
-}
-
-customCursor();
-
-if ($('.swiper-container').length > 0) {
-    var sliderGallery = undefined;
-    initSliderGallery();
-
-    $(window).on('resize', function () {
-        initSliderGallery();
-    });
-}
-
-function initSliderGallery() {
-    var screenWidth = $(window).width();
-    if (screenWidth > 1350 && sliderGallery == undefined) {
-        sliderGallery = new Swiper('.swiper-container', {
-            loop: true,
-            preloadImages: false,
-            lazy: true,
-            on: {
-                afterInit: function() {
-                    if($('.swiper-slide-active video').length > 0) {
-                        $('.swiper-slide-active video')[0].play();
-                    }
-                }
-            }
-        });
-
-        sliderGallery.on('slideChangeTransitionEnd', function() {
-            if($('.swiper-slide video').length > 0) {
-                $('.swiper-slide video').each(function() {
-                    $(this)[0].pause();
-                    $(this)[0].currentTime = 0;
-                })
-            }
-            
-            if($('.swiper-slide-active video').length > 0) {
-                $('.swiper-slide-active video')[0].play();
-            }
-        });
-
-        $('.single__arrow--dir_right').on('click', function () {
-            sliderGallery.slideNext();
-        });
-
-    } else if (screenWidth < 1351 && sliderGallery != undefined) {
-        sliderGallery.destroy();
-        sliderGallery = undefined;
-    }
-
-}
-
-if ($('#slider').length > 0) {
-    var swiper = undefined;
-    initSwiper();
-
-    $(window).on('resize', function () {
-        initSwiper();
+     $(window).scroll(function() {
+      fixContrastBg()
     });
 
-    if(swiper) {
-        swiper.on('slideChange', function() {
-            var location = window.location.origin;
-            var activeSlide = swiper.activeIndex;
-            var position = $('.swiper-slide:eq(' + activeSlide + ')').data('url');
-            var url = location + '/' + position;
-            // var tab = '';
-            if(activeSlide == 1) {
-                url = $('.services__link--active').attr('href');
-                // var activeTab = $('.services__link--active').data('tab');
-                // tab = '/#tab-' + activeTab;
-            }
-            
-            history.replaceState(null, '', url);    
-        });
-    }
+
+
+    (function () {
     
-}
-
-function initSwiper() {
-    var screenWidth = $(window).width();
-    let wrapper = document.querySelector('.holder');
-
-    if (screenWidth > 1150 && swiper == undefined) {
-        const asideList = document.getElementsByClassName('aside__list')[0],
-            asideListItems = asideList.children,
-            activeItemClass = 'aside__link--active';
-
-        var currentActive = document.querySelector('.aside__link--active').dataset.number;
-
-        swiper = new Swiper('#slider', {
-            direction: 'horizontal',
-            loop: false,
-            mousewheel: true,
-            freeMode: true
-        });
-
-        swiper.on('init resize', function () {
-            asideListItems[currentActive].classList.add(activeItemClass);
-        });
-
-        swiper.on('activeIndexChange', function (e) {
-            asideListItems[e.previousIndex].classList.remove(activeItemClass);
-            asideListItems[e.realIndex].classList.add(activeItemClass);
-
-        });
-
-        swiper.on('slideChange', function () {
-            let elems = document.querySelectorAll('.item.swiper-slide');
-            let elemIndex = swiper.activeIndex;
-            elems.forEach(function (item, index) {
-                if (elemIndex > 0) {
-                    wrapper.classList.add('dark__mode');
-                } else {
-                    wrapper.classList.remove('dark__mode');
-                }
-            })
-
-            if (swiper.activeIndex == 1 && document.querySelector('.services').classList.contains('dark-bg')) {
-                wrapper.classList.remove('dark__mode');
-            }
-        });
-
-        asideList.onclick = event => {
-            if (event.target.tagName !== 'LI') return;
-            let number = +event.target.dataset.number;
-            swiper.slideTo(number);
-        }
-
-        let links = document.querySelectorAll('.aside__link--active');
-        if (links.length > 1) {
-            links.forEach(function (item, index) {
-                if (index == 0) return false;
-                item.classList.remove('aside__link--active');
-            })
-        }
-
-    } else if (screenWidth < 1151 && swiper != undefined) {
-        swiper.destroy();
-        swiper = undefined;
-        wrapper.classList.remove('dark__mode');
-    }
-
-}
-
-if($('.photo__wrap').length) {
-    // Получаем нужный элемент
-    var element = document.querySelector('.photo__image');
-    var isResizeble = false;
-    let elems = document.querySelectorAll('.photo__image');
-
-    var Visible = function (target) {
-        // Все позиции элемента
-        var targetPosition = {
-            top: window.pageYOffset + target.getBoundingClientRect().top,
-            left: window.pageXOffset + target.getBoundingClientRect().left,
-            right: window.pageXOffset + target.getBoundingClientRect().right,
-            bottom: window.pageYOffset + target.getBoundingClientRect().bottom
-        },
-        // Получаем позиции окна
-        windowPosition = {
-            top: window.pageYOffset,
-            left: window.pageXOffset,
-            right: window.pageXOffset + document.documentElement.clientWidth,
-            bottom: window.pageYOffset + document.documentElement.clientHeight
-        };
-
-        if (targetPosition.bottom > windowPosition.top && // Если позиция нижней части элемента больше позиции верхней чайти окна, то элемент виден сверху
-            targetPosition.top < windowPosition.bottom && // Если позиция верхней части элемента меньше позиции нижней чайти окна, то элемент виден снизу
-            targetPosition.right > windowPosition.left && // Если позиция правой стороны элемента больше позиции левой части окна, то элемент виден слева
-            targetPosition.left < windowPosition.right) { // Если позиция левой стороны элемента меньше позиции правой чайти окна, то элемент виден справа
-            // Если элемент полностью видно, то запускаем следующий код
-
-            target.classList.add('photo__image--animation');
-
-            if (!isResizeble) {
-                //  ф-ция которая, отработает 1 раз и все
-                isResizeble = true;
-            } else {
-                // Если элемент не видно, то запускаем этот код
-            }
-        } else {
-            // target.classList.remove('photo__image--animation');
-        }
-
-    }
-
-    // Запускаем функцию при прокрутке страницы
-    window.addEventListener('scroll', function () {
-        for (let elem of elems) {
-            Visible(elem);
+    $('.select__wrap').each(function () {
+        var placeholder = $(this).find('.select__placeholder').html();
+        if(placeholder == '') {
+            checkActive(this);
+            placeholder = $(this).find('.select__placeholder').html();
         }
     });
 
-    // А также запустим функцию сразу. А то вдруг, элемент изначально видно
-    for (let elem of elems) {
-        Visible(elem);
-    }
-
-}
-
-$('.btn--decor').on('click', function() {
-    if(swiper) {
-        swiper.slideNext(300, false);
-    }
-});
-
-$('.services__link').on('hover mouseenter', function() {
-    if($(window).width() > 1150) {
-        var tab = $(this).data('tab');
-        $('.services__link').removeClass('services__link--active');
-        $('.services__box--content').addClass('services__box--hidden');
-        $(this).addClass('services__link--active');
-        $('.tab-' + tab).removeClass('services__box--hidden');
-    
-        var url = $(this).attr('href');
-        // var location = window.location.origin;
-        // var path = window.location.pathname;
-        // history.replaceState(null, '', location + path + '#tab-' + tab); 
-        history.replaceState(null, '', url); 
-        return false;
-    }
-});
-
-var hash = window.location.hash;
-if(hash.indexOf('tab') !== -1) {
-    var pos = hash.indexOf('#tab-');
-    if(pos !== -1) {
-        if($(window).width() > 1150) {
-            var el = hash.substr(pos + 5);
-            $('.services__link').removeClass('services__link--active');
-            $('.services__box--content').addClass('services__box--hidden');
-            $('.services__link[data-tab="' + el + '"]').addClass('services__link--active');
-            $('.tab-' + el).removeClass('services__box--hidden');
-            swiper.slideTo(1, 0, false);
-        } else {
-            var offset = $('.services').offset().top;
-            $('html, body').animate({scrollTop: offset + 'px'}, 500);
+    $('.select__wrap').on('click', function (e) {
+        if ($(e.target).is('.select__disabled') || $(e.target).closest('.select__list').length) {
+            return false;
         }
-    }
-}
+        
+        let $select__wrap = $(this);
 
-// var search = window.location.search;
-// if(search.indexOf('slide=3') !== -1) {
-//     swiper.slideTo(2, 0, false);
-// }
-
-function validate(input, length, regExp, error, phone) {
-
-    $(input).on('input blur', function () {
-        var value = $(this).val();
-        var that = $(this);
-
-        regExp = regExp == '' ? /./ : regExp;
-
-        if (phone === true) {
-            bool_reg = !regExp.test(value);
+        if(!$select__wrap.hasClass('select__wrap--active')) {
+          if($select__wrap.hasClass('select__wrap--end-active')) {
+          // предотвращение дребезга
+          // меню ещё закрывается
+          return
+          }
+            showSelectList($select__wrap)
         } else {
-            bool_reg = regExp.test(value);
+            hideSelectList($select__wrap)
         }
+        
+    });
 
-        if (value.length > length && value !== '' && bool_reg) {
-            that.removeClass('form-fail').addClass('form-done');
-            $(error).slideUp();
+    $('.select__wrap').on('click', '.select__item', function (e) {
+        if ($(e.target).is('.select__item--disabled')) {
+            return false;
         } else {
-            that.removeClass('form-done').addClass('form-fail');
-            $(error).slideDown();
+            let $select__wrap = $(this).parents('.select__wrap')
+            let $select__item = $(this)
+
+            $select__wrap.find('.select__item--active').removeClass('select__item--active')
+            $select__item.addClass('select__item--active');
+            setPlaceholder(this);
+
+            hideSelectList($select__wrap)
         }
     });
 
-};
+    $('body').on('input', '.select__input', function (e) {
+        let isFound;
+        $(e.target).parent().siblings('li').each((i, el) => {
+            let is = $(el).html().toLowerCase().indexOf(e.target.value.toLowerCase()) != -1;
+            $(el).css("display", is ? "block" : "none");
+            if(is) isFound = true;
+        });
+        $('.select__item-search-not-found').css("display", isFound ? "none" : "block");
+    })
 
-// деакцивация кнопки если есть поле с ошибкой
-
-function disBtn(input, btn) {
-    var input = $(input);
-    input.on('input blur', function () {
-
-        if (input.hasClass('form-fail')) {
-            $(btn).attr('disabled', 'disabled');
-        } else {
-            $(btn).removeAttr('disabled');
+    $(document).on('click', function (e) {
+        var $select__wrap = $(".select__wrap");
+        if (!$select__wrap.is(e.target) && $select__wrap.has(e.target).length === 0) {
+            hideSelectList($select__wrap)
         }
-
     });
 
-};
+    function showSelectList($select__wrap) {
+        let $select__list = $select__wrap.find(".select__list");
 
-// для проверки при нажатии
+        let { height, top, bottom } = $select__list.get(0).getBoundingClientRect();
+        if($(window).height() < bottom - 16 && top > height + 16 * 2) {
+        $select__wrap.addClass('select__wrap--position-top');
+        }
 
-function valClick(input, length, regExp, error, phone) {
-    var value = $(input).val();
-
-    regExp = regExp == '' ? /./ : regExp;
-
-    if (phone === true) {
-        bool_reg = regExp.test(value);
-    } else {
-        bool_reg = !regExp.test(value);
+        $('.select__wrap').removeClass('select__wrap--active');
+        $select__wrap.addClass('select__wrap--start-active');
+        setTimeout(() => {
+            $select__wrap.removeClass('select__wrap--start-active').addClass('select__wrap--active');
+            let duration = getTransitionDuration($select__list);
+            setTimeout(() => {$select__wrap.addClass('select__wrap--end-active')}, duration)
+        }, 0)
+        
     }
 
-    if (value.length < length || value === '' || bool_reg) {
-        $(input).addClass('form-fail');
-        $(error).slideDown();
-    }
-};
-
-//  деакцивация кнопки при нажатии
-
-function disBtnClick(input, btn) {
-    var input = $(input);
-
-    if (input.hasClass('form-fail')) {
-        $(btn).attr('disabled', 'disabled');
-        return false;
-    } else {
-        return true;
+    function hideSelectList($select__wrap) {
+        $select__wrap.removeClass('select__wrap--active');
+        let duration = getTransitionDuration($select__wrap.find(".select__list"));
+        setTimeout(() => {$select__wrap.removeClass('select__wrap--position-top select__wrap--end-active')}, duration)
     }
 
-};
-
-$('input[type="tel"]').mask("+38 (999) 999-99-99");
-
-var regName = /^[a-zA-Zа-яА-ЯёЁІі]+/;
-var regPhone = /[_]/i;
-var regEmail = /.+@.+\..+/i;
-var regNumber = /^\d{1,}$/;
-
-$('.input').on('focus', function () {
-    $(this).next().addClass('label-active');
-});
-
-$('.input').on('blur', function () {
-    if ($(this).val() == '') {
-        $(this).next().removeClass('label-active');
+    function setPlaceholder(self) {
+        var value_pl = $(self).html();
+        $(self).parents('.select__wrap').find('.select__placeholder').html(value_pl);
     }
-});
 
-$('.overlay-close').click(function () {
-    var overlay = $(this).parents('.overlay');
-    overlay.removeClass('overlay-active');
-});
-
-$('body').on('click', function (e) {
-    if ($(e.target).is('.overlay-request')) {
-        $('.overlay-request').removeClass('overlay-active');
+    function checkActive(self) {
+        var text = $(self).find('.select__item--active').text();
+        if (text === undefined || text === '') {
+            text = $(self).find('.select__item:not(.select__item--disabled):eq(0)').addClass('select__item--active').text();
+        }
+        $(self).find('.select__placeholder').html(text);
     }
-});
 
-$('.btn--order, .btn--popup').on('click', function (e) {
-    $('.overlay-request').addClass('overlay-active');
-});
-
-$('#btn--send').on('click', function () {
-    var name = $('#c_name').val();
-    var phone = $('#c_phone').val();
-    var email = $('#c_email').val();
-
-    validate('#c_name', 1, regName, '.contacts .contacts__fail--name');
-    validate('#c_phone', 1, regPhone, '.contacts .contacts__fail--phone', true);
-    disBtn('#c_name, #c_phone', '#btn--send');
-
-    valClick('#c_name', 1, regName, '.contacts .contacts__fail--name');
-    valClick('#c_phone', 1, regPhone, '.contacts .contacts__fail--phone', true);
-    var btn_bool = disBtnClick('#c_name, #c_phone', '#btn--send');
-
-    if (btn_bool) {
-        $.ajax({
-            url: myajax.url,
-            type: 'POST',
-            data: {
-                action: 'contact',
-                name: name,
-                phone: phone,
-                email: email,
-            },
-        }).done(function (data) {
-            $('#c_name, #c_phone, #c_email').val('').removeClass('form-done');
-            var text = 'Ваше повідомлення успішно надіслано!';
-            
-            $('.msg-modal').html(text).addClass('msg-modal-active');
-            setTimeout(function () {
-                $('.msg-modal').removeClass('msg-modal-active');
-            }, 2500);
-        });
-
+    // Возвращает макс прододжительность анимации $self
+    // Поддерживает только время в секундах (s)
+    function getTransitionDuration($self) {
+        return Math.max(...$self.css('transition-duration').split('s,').map(parseFloat), 0) * 1000 + 50;
     }
-    return false;
-});
 
-$('#btn--popup').on('click', function () {
-    var name = $('#p_name').val();
-    var phone = $('#p_phone').val();
-    var email = $('#p_email').val();
+})();
 
-    validate('#p_name', 1, regName, '.overlay .contacts__fail--name');
-    validate('#p_phone', 1, regPhone, '.overlay .contacts__fail--phone', true);
-    disBtn('#p_name, #p_phone', '#btn--popup');
-
-    valClick('#p_name', 1, regName, '.overlay .contacts__fail--name');
-    valClick('#p_phone', 1, regPhone, '.overlay .contacts__fail--phone', true);
-    var btn_bool = disBtnClick('#p_name, #p_phone', '#btn--popup');
-
-    if (btn_bool) {
-        $.ajax({
-            url: myajax.url,
-            type: 'POST',
-            data: {
-                action: 'contact',
-                name: name,
-                phone: phone,
-                email: email,
-            },
-        }).done(function (data) {
-            $('#p_name, #p_phone, #p_email').val('').removeClass('form-done');
-            $('.overlay-request').removeClass('overlay-active');
-            var text = 'Ваше повідомлення успішно надіслано!';
-            
-            $('.msg-modal').html(text).addClass('msg-modal-active');
-            setTimeout(function () {
-                $('.msg-modal').removeClass('msg-modal-active');
-            }, 2500);
-        });
-
-    }
-    return false;
-});
 
 });
